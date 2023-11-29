@@ -6,7 +6,7 @@ pipeline {
     VERSION = "${env.BUILD_ID}-${env.GIT_COMMIT}"
     IMAGE_REPO = "siddharth67"
     ARGOCD_TOKEN = credentials('argocd-token')
-    GITEA_TOKEN = credentials('gitea-token')
+    GITHUB_TOKEN = credentials('github-token')
   }
   
   stages {
@@ -45,7 +45,7 @@ pipeline {
 
           } else {
             echo 'Repo does not exists - Cloning the repo'
-            sh 'git clone -b feature-gitea http://139.59.21.103:3000/siddharth/gitops-argocd'
+            sh 'git clone -b feature https://github.com/vidalgithub/gitops-argocd.git'  
           }
         }
       }
@@ -64,11 +64,11 @@ pipeline {
       steps {
         dir("gitops-argocd/jenkins-demo") {
           sh "git config --global user.email 'jenkins@ci.com'"
-          sh 'git remote set-url origin http://$GITEA_TOKEN@139.59.21.103:3000/siddharth/gitops-argocd'
-          sh 'git checkout feature-gitea'
+          sh 'git remote set-url origin https://$GITHUB_TOKEN@github.com/vidalgithub/gitops-argocd.git'
+          sh 'git checkout feature'
           sh 'git add -A'
           sh 'git commit -am "Updated image version for Build - $VERSION"'
-          sh 'git push origin feature-gitea'
+          sh 'git push origin feature'
         }
       }
     }
