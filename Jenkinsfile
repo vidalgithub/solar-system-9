@@ -60,11 +60,8 @@ pipeline {
       steps {
         dir("gitops-argocd/jenkins-demo") {
           sh '''
-          pwd
           sed -i "s#${IMAGE_REPO}.*#${IMAGE_REPO}/${NAME}:${VERSION}#g" deployment.yaml
-          echo $?
           cat deployment.yaml
-          pwd
           '''
         }
       }
@@ -81,18 +78,16 @@ pipeline {
           git add -A
           git commit -am "Updated image version for Build - $VERSION"
           git push origin feature
-          pwd
-          echo "it is crazy"
           '''
         }
       }
     }
-
+/*
     stage('Raise PR') {
       steps {
         sh "bash pr.sh"
       }
     } 
-   
+   */
   }
 }
