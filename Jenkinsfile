@@ -6,7 +6,7 @@ pipeline {
     VERSION = "${env.BUILD_ID}-${env.GIT_COMMIT}"
     IMAGE_REPO = "vidaldocker"
     // ARGOCD_TOKEN = credentials('argocd-token')
-    GITHUB_TOKEN = credentials('github-token')
+    GITHUB_TOKEN=credentials('github-token')
     DOCKERHUB_CREDENTIALS=credentials('dockerhub')
   }
   
