@@ -63,7 +63,7 @@ pipeline {
           pwd
           sed -i "s#siddharth67.*#${IMAGE_REPO}/${NAME}:${VERSION}#g" deployment.yaml
           echo $?
-          cat deployment.yaml
+          cat ./deployment.yaml
           pwd
           '''
         }
@@ -85,12 +85,12 @@ pipeline {
         }
       }
     }
- /* Commenting out
+
     stage('Raise PR') {
       steps {
         sh "bash pr.sh"
       }
     } 
-    */
+   
   }
 }
