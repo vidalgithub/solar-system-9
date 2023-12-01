@@ -77,7 +77,7 @@ pipeline {
           git checkout feature
           git add -A
           git commit -am "Updated image version for Build - $VERSION"
-          echo "Current commit SHA: ${env.GIT_COMMIT}"
+          git rev-parse --short=10 HEAD 
           git push origin feature
           '''
         }
