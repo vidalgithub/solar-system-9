@@ -61,9 +61,9 @@ pipeline {
         dir("gitops-argocd/jenkins-demo") {
           sh '''
           pwd
-          sed -i "s#siddharth67.*#${IMAGE_REPO}/${NAME}:${VERSION}#g" deployment.yaml
+          sed -i "s#${IMAGE_REPO}.*#${IMAGE_REPO}/${NAME}:${VERSION}#g" deployment.yaml
           echo $?
-          cat ./deployment.yaml
+          cat deployment.yaml
           pwd
           '''
         }
