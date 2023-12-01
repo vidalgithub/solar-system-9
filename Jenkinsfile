@@ -7,6 +7,7 @@ pipeline {
     IMAGE_REPO = "vidaldocker"
     // ARGOCD_TOKEN = credentials('argocd-token')
     GITHUB_TOKEN = credentials('github-token')
+    DOCKERHUB_CREDENTIALS=credentials('dockerhub')
   }
   
   stages {
@@ -24,11 +25,15 @@ pipeline {
         }
       }
 
+    stage('Docker Login') {
+      steps {
+            sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+        }
+      }
+
     stage('Push Image') {
       steps {
-        withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
           sh 'docker push ${IMAGE_REPO}/${NAME}:${VERSION}'
-        }
       }
     }
 
