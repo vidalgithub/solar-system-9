@@ -72,11 +72,12 @@ pipeline {
         }
       }
     }
-
+ /* Commenting out
     stage('Raise PR') {
       steps {
         sh "bash pr.sh"
       }
     } 
+    */
   }
 }
