@@ -73,15 +73,17 @@ pipeline {
     stage('Commit & Push') {
       steps {
         dir("gitops-argocd/jenkins-demo") {
-          sh "git config --global user.email 'vidalngka@gmail.com'"
-          sh "git config --global user.name 'vidalgithub'"
-          sh 'git remote set-url origin https://$GITHUB_TOKEN@github.com/vidalgithub/gitops-argocd.git'
-          sh 'git checkout feature'
-          sh 'git add -A'
-          sh 'git commit -am "Updated image version for Build - $VERSION"'
-          sh 'git push origin feature'
-          sh 'pwd'
-          sh 'echo "it is crazy"'
+          sh '''
+          git config --global user.email 'vidalngka@gmail.com'
+          git config --global user.name 'vidalgithub'
+          git remote set-url origin https://$GITHUB_TOKEN@github.com/vidalgithub/gitops-argocd.git
+          git checkout feature
+          git add -A
+          git commit -am "Updated image version for Build - $VERSION"
+          git push origin feature
+          pwd
+          echo "it is crazy"
+          '''
         }
       }
     }
