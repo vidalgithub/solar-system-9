@@ -1,7 +1,7 @@
 pipeline {
-  agent any
-  //      label 'gcp'
-  //  }
+  agent {
+        label 'gcp'
+    }
 
   environment {
     NAME = "solar-system"
