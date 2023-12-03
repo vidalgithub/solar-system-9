@@ -88,8 +88,8 @@ pipeline {
 
     stage('Raise PR') {
       steps {
-        //chown jenkins:jenkins pr.sh
-        //chmod + x pr.sh
+        chown jenkins:jenkins pr.sh
+        chmod +x pr.sh
         sh "./pr.sh"
       }
     } 
