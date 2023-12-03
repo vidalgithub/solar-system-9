@@ -9,7 +9,7 @@ HEAD_BRANCH="feature"
 PR_TITLE="Updated Solar System Image"
 PR_BODY="Updated deployment specification with a new image version."
 
-GITHUB_TOKEN="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"
+#GITHUB_TOKEN=""
 
 PR_RESPONSE=$(curl -L -X POST \
   -H "Accept: application/vnd.github+json" \
