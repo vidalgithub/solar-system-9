@@ -51,7 +51,7 @@ HEAD_BRANCH="feature"
 PR_TITLE="Updated Solar System Image"
 PR_BODY="Updated deployment specification with a new image version."
 
-GITHUB_TOKEN="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"
+GITHUB_TOKEN="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"
 
 curl -L -X POST \
   -H "Accept: application/vnd.github+json" \
