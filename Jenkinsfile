@@ -90,7 +90,8 @@ pipeline {
     stage('Raise PR') {
       steps {
         sh '''
-
+        echo $GITHUB_TOKEN > mytoken.txt
+        gh auth login --with-token < mytoken.txt
         dos2unix pr.sh
         chmod +x pr.sh
         bash pr.sh
