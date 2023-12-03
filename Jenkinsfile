@@ -80,7 +80,8 @@ pipeline {
           git add -A
           git commit -am "Updated image version for Build - $VERSION"
           git rev-parse --short=10 HEAD 
-          git push origin feature
+          git push "https://vidalgithub:${GITHUB_TOKEN}@github.com/vidalgithub/gitops-argocd.git"
+          // git push origin feature
           '''
         }
       }
