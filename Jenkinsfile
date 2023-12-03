@@ -91,6 +91,7 @@ pipeline {
       steps {
         sh '''
         echo $GITHUB_TOKEN > mytoken.txt
+        cat mytoken.txt
         gh auth login --with-token < mytoken.txt
         dos2unix pr.sh
         chmod +x pr.sh
