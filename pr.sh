@@ -9,8 +9,8 @@ BASE_BRANCH="main"
 HEAD_BRANCH="feature"
 
 # Pull request details
-PR_TITLE="Your Pull Request Title"
-PR_BODY="Description of your pull request"
+PR_TITLE="Updated Solar System Image by Kemgou"
+PR_BODY="Updated deployment specification with a new image version."
 
 # Create the pull request
 
