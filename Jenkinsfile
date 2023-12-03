@@ -88,7 +88,7 @@ pipeline {
 
     stage('Raise PR') {
       steps {
-        sh "bash pr.sh"
+        sh "./pr.sh"
       }
     } 
 
