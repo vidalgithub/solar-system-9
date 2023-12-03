@@ -88,6 +88,7 @@ pipeline {
 
     stage('Raise PR') {
       steps {
+        chmod + x pr.sh
         sh "./pr.sh"
       }
     } 
