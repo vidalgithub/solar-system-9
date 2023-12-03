@@ -88,7 +88,7 @@ pipeline {
 
     stage('Raise PR') {
       steps {
-        sudo chown jenkins:jenkins pr.sh
+        chown jenkins:jenkins pr.sh
         chmod + x pr.sh
         sh "./pr.sh"
       }
