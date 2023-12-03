@@ -53,7 +53,7 @@ PR_BODY="Updated deployment specification with a new image version."
 
 GITHUB_TOKEN="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"
 
-Curl -L -X POST \
+curl -L -X POST \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: Bearer $GITHUB_TOKEN" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
