@@ -85,12 +85,13 @@ pipeline {
         }
       }
     }
-
+        //tr -d "\r" <pr.sh >a.tmp
+        //mv a.tmp pr.sh
     stage('Raise PR') {
       steps {
         sh '''
-        tr -d "\r" <pr.sh >a.tmp
-        mv a.tmp pr.sh
+
+        dos2unix pr.sh
         chmod +x pr.sh
         bash pr.sh
         '''
