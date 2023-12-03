@@ -2,7 +2,7 @@
 
 echo "Opening a Pull Request"
 # Create PR
-REPO_OWNER="john"
+REPO_OWNER="vidalgithub"
 REPO_NAME="gitops-argocd"
 BASE_BRANCH="main"
 HEAD_BRANCH="feature"
