@@ -80,7 +80,7 @@ pipeline {
           git add -A
           git commit -am "Updated image version for Build - $VERSION"
           git rev-parse --short=10 HEAD 
-          git push
+          git push origin feature
           '''
         }
       }
