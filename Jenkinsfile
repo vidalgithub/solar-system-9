@@ -92,19 +92,10 @@ pipeline {
     stage('Raise PR') {
       steps {
         sh '''
-        ORIGINAL_TOKEN=$GITHUB_TOKEN
-        cat $ORIGINAL_TOKEN
-        cat pr.sh
-        unset GITHUB_TOKEN
-        echo $ORIGINAL_TOKEN > mytoken.txt
-        gh auth login --with-token < mytoken.txt
-        dos2unix pr.sh
-        chmod +x pr.sh
-        cat $ORIGINAL_TOKEN
-        cat pr.sh
+        cd ../solar-system-9
         bash pr.sh
-        GITHUB_TOKEN=$ORIGINAL_TOKEN
         '''
+        }
       }
     } 
 
