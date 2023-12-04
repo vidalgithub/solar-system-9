@@ -96,7 +96,6 @@ pipeline {
         pwd
         ls
         cat pr.sh
-        cd ../solar-system-9
         bash pr.sh
         '''
         }
