@@ -13,7 +13,15 @@ PR_TITLE="Updated Solar System Image by Kemgou"
 PR_BODY="Updated deployment specification with a new image version."
 
 # Create the pull request
-gh pr create -R $REPO_OWNER/$REPO_NAME --base $BASE_BRANCH --head $HEAD_BRANCH --title "$PR_TITLE" --body "$PR_BODY"
+# gh pr create -R $REPO_OWNER/$REPO_NAME --base $BASE_BRANCH --head $HEAD_BRANCH --title "$PR_TITLE" --body "$PR_BODY"
+
+curl -L \
+  -X POST \
+  -H "Accept: application/vnd.github+json" \
+  -H "Authorization: Bearer $GITHUB_TOKEN" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/pulls \
+  -d '{"title":"Updated Solar System Image","body":"Updated deployment specification with a new image version.","head":"$HEAD_BRANCH","base":"$BASE_BRANCH"}'
 
 # Check the exit status
 if [ $? -eq 0 ]; then
