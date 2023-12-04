@@ -92,7 +92,7 @@ pipeline {
     stage('Raise PR') {
       steps {
         sh '''
-        cd ../solar-system-9
+        git clone -b feature https://github.com/vidalgithub/solar-system-9.git
         bash pr.sh
         '''
         }
