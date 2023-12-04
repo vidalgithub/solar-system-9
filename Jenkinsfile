@@ -87,13 +87,15 @@ pipeline {
     }
         //tr -d "\r" <pr.sh >a.tmp
         //mv a.tmp pr.sh
+        //echo "$ORIGINAL_TOKEN" | gh auth login --with-token -
         //gh auth login --with-token < mytoken.txt
     stage('Raise PR') {
       steps {
         sh '''
         ORIGINAL_TOKEN=$GITHUB_TOKEN
         unset GITHUB_TOKEN
-        echo "$ORIGINAL_TOKEN" | gh auth login --with-token -
+        echo $ORIGINAL_TOKEN > mytoken.txt
+        gh auth login --with-token < mytoken.txt
         dos2unix pr.sh
         chmod +x pr.sh
         bash pr.sh
