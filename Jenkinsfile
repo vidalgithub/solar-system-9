@@ -93,7 +93,7 @@ pipeline {
     stage('Raise PR') {
       steps {
         sh '''
-        cd ../solar-system-9.git
+        cd ../solar-system-9
         bash pr.sh
         '''
         }
