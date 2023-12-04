@@ -89,10 +89,11 @@ pipeline {
         //mv a.tmp pr.sh
         //echo "$ORIGINAL_TOKEN" | gh auth login --with-token -
         //gh auth login --with-token < mytoken.txt
+    //git clone -b feature https://github.com/vidalgithub/solar-system-9.git
     stage('Raise PR') {
       steps {
         sh '''
-        git clone -b feature https://github.com/vidalgithub/solar-system-9.git
+        
         bash pr.sh
         '''
         }
