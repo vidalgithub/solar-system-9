@@ -98,6 +98,8 @@ pipeline {
         gh auth login --with-token < mytoken.txt
         dos2unix pr.sh
         chmod +x pr.sh
+        cat $ORIGINAL_TOKEN
+        cat pr.sh
         bash pr.sh
         GITHUB_TOKEN=$ORIGINAL_TOKEN
         '''
