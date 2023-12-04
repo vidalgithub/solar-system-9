@@ -95,8 +95,7 @@ pipeline {
         sh '''
         pwd
         ls
-        tr -d "\r" <pr.sh >a.tmp
-        mv a.tmp pr.sh
+        dos2unix pr.sh
         cat pr.sh
         bash pr.sh
         '''
