@@ -94,6 +94,7 @@ pipeline {
       steps {
         sh '''
         pwd
+        ls
         cd ../solar-system-9
         bash pr.sh
         '''
