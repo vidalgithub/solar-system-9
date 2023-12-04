@@ -93,6 +93,7 @@ pipeline {
     stage('Raise PR') {
       steps {
         sh '''
+        pwd
         cd ../solar-system-9
         bash pr.sh
         '''
