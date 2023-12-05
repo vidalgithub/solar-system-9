@@ -23,7 +23,7 @@ echo '<!DOCTYPE html>
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			background: url("https://github.com/vidalgithub/solar-system-9/blob/feature/images/images/background.gif");
+			background: url("https://github.com/vidalgithub/solar-system-9/blob/feature/images/background.gif");
 		}
 		
 /* 		.shadow {
