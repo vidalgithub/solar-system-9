@@ -3,7 +3,7 @@
 # GitHub repository details
 REPO_OWNER="vidalgithub"
 REPO_NAME="gitops-argocd"
-GITHUB-TOKEN="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"
+
 
 # Branches for the pull request
 BASE_BRANCH="main"
