@@ -97,6 +97,7 @@ pipeline {
         ls
         dos2unix pr.sh
         cat pr.sh
+        sudo chmod +x pr.sh
         bash pr.sh
         '''
         }
