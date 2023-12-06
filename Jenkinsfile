@@ -93,12 +93,22 @@ pipeline {
     stage('Raise PR') {
       steps {
         sh '''
-        pwd
-        ls
-        dos2unix pr.sh
-        cat pr.sh
-        sudo chmod +x pr.sh
-        bash pr.sh
+        REPO_OWNER="vidalgithub"
+        REPO_NAME="gitops-argocd"
+
+        BASE_BRANCH="main"
+        HEAD_BRANCH="feature"
+
+        PR_TITLE="Updated Solar System Image by Kemgou"
+        PR_BODY="Updated deployment specification with a new image version."
+
+        gh pr create -R $REPO_OWNER/$REPO_NAME --base $BASE_BRANCH --head $HEAD_BRANCH --title "$PR_TITLE" --body "$PR_BODY"
+
+        if [ $? -eq 0 ]; then
+          echo "Pull Request created successfully."
+        else
+          echo "Failed to create Pull Request."
+        fi
         '''
         }
       }
