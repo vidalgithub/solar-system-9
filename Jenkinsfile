@@ -101,7 +101,7 @@ pipeline {
 
         PR_TITLE="Updated Solar System Image by Kemgou"
         PR_BODY="Updated deployment specification with a new image version."
-
+        gh auth login --with-token <<< "$GITHUB_TOKEN"
         gh pr create -R $REPO_OWNER/$REPO_NAME --base $BASE_BRANCH --head $HEAD_BRANCH --title "$PR_TITLE" --body "$PR_BODY"
 
         if [ $? -eq 0 ]; then
