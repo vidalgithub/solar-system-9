@@ -89,6 +89,8 @@ pipeline {
         //mv a.tmp pr.sh
         //echo "$ORIGINAL_TOKEN" | gh auth login --with-token -
         //gh auth login --with-token < mytoken.txt
+        //gh auth login --with-token <<< "$GITHUB_TOKEN"
+       //echo "$GITHUB_TOKEN" | gh auth login --with-token -
     //git clone -b feature https://github.com/vidalgithub/solar-system-9.git
     stage('Raise PR') {
       steps {
@@ -101,7 +103,8 @@ pipeline {
 
         PR_TITLE="Updated Solar System Image by Kemgou"
         PR_BODY="Updated deployment specification with a new image version."
-        gh auth login --with-token <<< "$GITHUB_TOKEN"
+
+        echo "$GITHUB_TOKEN" | gh auth login --with-token -
         gh pr create -R $REPO_OWNER/$REPO_NAME --base $BASE_BRANCH --head $HEAD_BRANCH --title "$PR_TITLE" --body "$PR_BODY"
 
         if [ $? -eq 0 ]; then
