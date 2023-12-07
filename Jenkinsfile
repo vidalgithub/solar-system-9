@@ -95,23 +95,13 @@ pipeline {
     stage('Raise PR') {
       steps {
         sh '''
-        REPO_OWNER="vidalgithub"
-        REPO_NAME="gitops-argocd"
-
-        BASE_BRANCH="main"
-        HEAD_BRANCH="feature"
-
-        PR_TITLE="Updated Solar System Image by Kemgou"
-        PR_BODY="Updated deployment specification with a new image version."
-
-        echo "$GITHUB_TOKEN" | gh auth login --with-token -
-        gh pr create -R $REPO_OWNER/$REPO_NAME --base $BASE_BRANCH --head $HEAD_BRANCH --title "$PR_TITLE" --body "$PR_BODY"
-
-        if [ $? -eq 0 ]; then
-          echo "Pull Request created successfully."
-        else
-          echo "Failed to create Pull Request."
-        fi
+        curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/vidalgithub/gitops-argocd/pulls \
+            -d '{"title":"Updated Solar System Image by Kemgou N","body":"Please pull these awesome changes in!","head":"feature","base":"main"}'
         '''
         }
       }
