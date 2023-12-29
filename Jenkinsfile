@@ -98,11 +98,11 @@ pipeline {
         
         sh '''
           pwd
+          ls -la $PWD
           chown jenkins:jenkins pr.sh
           chmod +x pr.sh
           tr -d "\r" <pr.sh >a.tmp
           mv a.tmp pr.sh
-          cat pr.sh
           bash pr.sh
 
         '''
