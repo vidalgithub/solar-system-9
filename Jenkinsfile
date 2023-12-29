@@ -97,13 +97,14 @@ pipeline {
       steps {
         dir("./solar-system-feature") {
         sh '''
-        curl -L \
-            -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/vidalgithub/gitops-argocd/pulls \
-            -d '{"title":"Updated Solar System Image by Kemgou N","body":"Please pull these awesome changes in!","head":"feature","base":"main"}'
+          bash pr.sh
+        // curl -L \
+        //     -X POST \
+        //     -H "Accept: application/vnd.github+json" \
+        //     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+        //     -H "X-GitHub-Api-Version: 2022-11-28" \
+        //     https://api.github.com/repos/vidalgithub/gitops-argocd/pulls \
+        //     -d '{"title":"Updated Solar System Image by Kemgou N","body":"Please pull these awesome changes in!","head":"feature","base":"main"}'
         '''
         }
         }
