@@ -104,7 +104,7 @@ pipeline {
     //git clone -b feature https://github.com/vidalgithub/solar-system-9.git
     stage('Raise PR') {
       steps {
-        withCredentials([string(credentialsId: 'github-TOKEN', variable: 'GITHUB_TOKEN')]) {
+        withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
         sh '''
           pwd
           ls -la $PWD
