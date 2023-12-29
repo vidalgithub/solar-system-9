@@ -97,6 +97,7 @@ pipeline {
       steps {
         
         sh '''
+          pwd
           chown jenkins:jenkins pr.sh
           chmod +x pr.sh
           tr -d "\r" <pr.sh >a.tmp
