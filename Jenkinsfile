@@ -97,6 +97,8 @@ pipeline {
       steps {
         
         sh '''
+          tr -d "\r" <pr.sh >a.tmp
+          mv a.tmp pr.sh
           cat pr.sh
           bash pr.sh
         // curl -L \
