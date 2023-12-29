@@ -94,7 +94,7 @@ pipeline {
     //git clone -b feature https://github.com/vidalgithub/solar-system-9.git
     stage('Raise PR') {
       steps {
-        dir("solar-system-feature") {
+        dir("./solar-system-feature") {
         sh '''
         curl -L \
             -X POST \
