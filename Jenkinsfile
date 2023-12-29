@@ -95,8 +95,9 @@ pipeline {
     //git clone -b feature https://github.com/vidalgithub/solar-system-9.git
     stage('Raise PR') {
       steps {
-        dir("./solar-system-feature") {
+        
         sh '''
+          cat pr.sh
           bash pr.sh
         // curl -L \
         //     -X POST \
@@ -106,7 +107,7 @@ pipeline {
         //     https://api.github.com/repos/vidalgithub/gitops-argocd/pulls \
         //     -d '{"title":"Updated Solar System Image by Kemgou N","body":"Please pull these awesome changes in!","head":"feature","base":"main"}'
         '''
-        }
+  
         }
       }
     } 
