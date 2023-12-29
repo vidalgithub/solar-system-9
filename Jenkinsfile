@@ -86,6 +86,15 @@ pipeline {
         }
       }
     }
+
+        stage('Print Environment') {
+            steps {
+                script {
+                    sh 'env'
+                }
+            }
+        }
+    
         //tr -d "\r" <pr.sh >a.tmp
         //mv a.tmp pr.sh
         //echo "$ORIGINAL_TOKEN" | gh auth login --with-token -
