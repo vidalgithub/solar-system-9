@@ -82,6 +82,7 @@ pipeline {
           git rev-parse --short=10 HEAD 
           git push origin feature
           '''
+          
         }
       }
     }
@@ -104,6 +105,7 @@ pipeline {
             https://api.github.com/repos/vidalgithub/gitops-argocd/pulls \
             -d '{"title":"Updated Solar System Image by Kemgou N","body":"Please pull these awesome changes in!","head":"feature","base":"main"}'
         '''
+        }
         }
       }
     } 
