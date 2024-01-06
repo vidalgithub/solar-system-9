@@ -143,6 +143,10 @@ pipeline {
                 )
             }
         }
+
+        always {
+            cleanWs()
+        }
     }
 
   }
