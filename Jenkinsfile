@@ -1,6 +1,6 @@
 pipeline {
   agent {
-        label 'kemgou'
+        label 'gce'
     }
 
   environment {
