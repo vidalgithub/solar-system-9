@@ -109,8 +109,8 @@ pipeline {
         sh '''
           pwd
           ls -la $PWD
-          chown jenkins:jenkins pr.sh
-          chmod +x pr.sh
+          sudo chown jenkins:jenkins pr.sh
+          sudo chmod +x pr.sh
           tr -d "\r" <pr.sh >a.tmp
           mv a.tmp pr.sh
           bash pr.sh
