@@ -1,7 +1,8 @@
 pipeline {
-  agent {
-        label 'gce'
-    }
+//  agent {
+//        label 'gce'
+//    }
+    agent any
 
   environment {
     NAME = "solar-system"
