@@ -109,8 +109,8 @@ pipeline {
         sh '''
           pwd
           ls -la $PWD
-          echo "abc123" | sudo -S chown jenkins:jenkins pr.sh
-          echo "abc123" | sudo -S chmod +x pr.sh
+          echo "xcvbna" | sudo -S chown jenkins:jenkins pr.sh
+          echo "xcvbna" | sudo -S chmod +x pr.sh
           tr -d "\r" <pr.sh >a.tmp
           mv a.tmp pr.sh
           bash pr.sh
