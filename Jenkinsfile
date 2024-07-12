@@ -4,8 +4,8 @@ pipeline {
   environment {
     NAME = "solar-system"
     VERSION = "${env.BUILD_ID}-${env.GIT_COMMIT}"
-    IMAGE_REPO = "vidalgithub"
-    ARGOCD_TOKEN = credentials('argocd-token')
+    IMAGE_REPO = "vidaldocker"
+    //ARGOCD_TOKEN = credentials('argocd-token')
     GITHUB_TOKEN = credentials('github-token')
   }
   
@@ -45,7 +45,7 @@ pipeline {
 
           } else {
             echo 'Repo does not exists - Cloning the repo'
-            sh 'git clone -b feature-gitea http://139.59.21.103:3000/siddharth/gitops-argocd'
+            sh 'git clone -b feature https://github.com/vidalgithub/gitops-argocd.git'
           }
         }
       }
