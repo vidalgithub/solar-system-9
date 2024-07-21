@@ -26,12 +26,11 @@ echo '<!DOCTYPE html>
             align-items: center;
             justify-content: center;
             background: url("https://github.com/vidalgithub/solar-system-9/blob/feature/images/background.gif");
-            /* Additional styles can be added here */
          }
       </style>
    </head>
    <body>
-      <div id="solar-system"></div>
+      <div id="solar-system"> </div>
    </body>
-</html>';
-?>
+</html>
+';
