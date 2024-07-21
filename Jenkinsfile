@@ -26,7 +26,7 @@ pipeline {
 
     stage('Push Image') {
       steps {
-        withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
+        withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: 'http://vault.beitcloud.com:8200'], vaultSecrets: [[path: 'dockerhub/creds', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
           sh 'docker push ${IMAGE_REPO}/${NAME}:${VERSION}'
         }
       }
@@ -54,7 +54,7 @@ pipeline {
     stage('Update Manifest') {
       steps {
         dir("gitops-argocd/jenkins-demo") {
-          sh 'sed -i "s#siddharth67.*#${IMAGE_REPO}/${NAME}:${VERSION}#g" deployment.yaml'
+          sh 'sed -i "s#vidaldocker.*#${IMAGE_REPO}/${NAME}:${VERSION}#g" deployment.yaml'
           sh 'cat deployment.yaml'
         }
       }
@@ -63,19 +63,24 @@ pipeline {
     stage('Commit & Push') {
       steps {
         dir("gitops-argocd/jenkins-demo") {
-          sh "git config --global user.email 'jenkins@ci.com'"
-          sh 'git remote set-url origin http://$GITEA_TOKEN@139.59.21.103:3000/siddharth/gitops-argocd'
-          sh 'git checkout feature-gitea'
-          sh 'git add -A'
-          sh 'git commit -am "Updated image version for Build - $VERSION"'
-          sh 'git push origin feature-gitea'
+          withVault {
+              sh "git config --global user.email 'jenkins@ci.com'"
+              sh 'git remote set-url origin http://$GITHUB_TOKEN@github.com/vidalgithub/gitops-argocd.git'
+              sh 'git checkout feature'
+              sh 'git add -A'
+              sh 'git commit -am "Updated image version for Build - $VERSION"'
+              sh 'git push origin feature'
+          }
         }
       }
     }
 
     stage('Raise PR') {
+      agent {
+        docker { image 'trussworks/gh-cli:dependabot-docker-cimg-python-3.10.6' }
+      }
       steps {
-        sh "bash pr.sh"
+        sh "bash prq.sh"
       }
     } 
   }
