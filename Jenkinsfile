@@ -76,7 +76,7 @@ pipeline {
         stage('Commit & Push') {
           steps {
             dir("gitops-argocd/jenkins-demo") {
-              withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: 'http://vault.beitcloud.com:8200'], vaultSecrets: [[path: 'mycreds/GitHub/github-token', secretValues: [[envVar: 'GITHUB_TOKEN', vaultKey: 'git_token']]]]) {
+              withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: 'http://vault.beitcloud.com:8200'], vaultSecrets: [[path: 'mycreds/github/github-token', secretValues: [[envVar: 'GITHUB_TOKEN', vaultKey: 'git_token']]]]) {
                   sh '''
                   git config --global user.email 'vidalngka@gmail.com'
                   git config --global user.name 'vidalgithub'
