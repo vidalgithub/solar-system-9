@@ -73,16 +73,18 @@ pipeline {
     stage('Commit & Push') {
       steps {
         dir("gitops-argocd/jenkins-demo") {
-          sh '''
-          git config --global user.email 'vidalngka@gmail.com'
-          git config --global user.name 'vidalgithub'
-          git remote set-url origin https://$GITHUB_TOKEN@github.com/vidalgithub/gitops-argocd.git
-          git checkout feature
-          git add -A
-          git commit -am "Updated image version for Build - $VERSION"
-          git rev-parse --short=10 HEAD 
-          git push origin feature
-          '''
+          withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: 'http://vault.beitcloud.com:8200'], vaultSecrets: [[path: 'mycreds/GitHub/github-token', secretValues: [[envVar: 'GITHUB_TOKEN', vaultKey: 'git_token']]]]) {
+              sh '''
+              git config --global user.email 'vidalngka@gmail.com'
+              git config --global user.name 'vidalgithub'
+              git remote set-url origin https://$GITHUB_TOKEN@github.com/vidalgithub/gitops-argocd.git
+              git checkout feature
+              git add -A
+              git commit -am "Updated image version for Build - $VERSION"
+              git rev-parse --short=10 HEAD 
+              git push origin feature
+              '''
+          }
           
         }
       }
@@ -104,8 +106,11 @@ pipeline {
        //echo "$GITHUB_TOKEN" | gh auth login --with-token -
     //git clone -b feature https://github.com/vidalgithub/solar-system-9.git
     stage('Raise PR') {
+      agent {
+        docker { image 'trussworks/gh-cli:dependabot-docker-cimg-python-3.10.6' }
+      }
       steps {
-        withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
+        withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: 'http://vault.beitcloud.com:8200'], vaultSecrets: [[path: 'mycreds/GitHub/github-token', secretValues: [[envVar: 'GITHUB_TOKEN', vaultKey: 'git_token']]]]) {
         sh '''
           pwd
           ls -la $PWD
