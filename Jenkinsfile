@@ -126,7 +126,7 @@ pipeline {
     } 
 
 
-      post {
+      /*post {
         success {
             script {
                 slackSend(
@@ -153,7 +153,7 @@ pipeline {
 
         always {
             cleanWs()
-        }
+        }*/
     }
 
   }
