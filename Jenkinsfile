@@ -10,7 +10,7 @@ pipeline {
         IMAGE_REPO = "vidaldocker"
         // ARGOCD_TOKEN = credentials('argocd-token')
         GITHUB_TOKEN=credentials('github-token')
-        DOCKERHUB_CREDENTIALS=credentials('dockerhub')
+        //DOCKERHUB_CREDENTIALS=credentials('dockerhub')
       }
       
     stages {
@@ -23,8 +23,11 @@ pipeline {
     
         stage('Build Image') {
           steps {
-                sh "docker build -t ${NAME}:latest ."
-                sh "docker tag ${NAME}:latest ${IMAGE_REPO}/${NAME}:${VERSION}"
+                withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: 'http://vault.beitcloud.com:8200'], vaultSecrets: [[path: 'dockerhub/creds', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]])  {
+                    sh 'docker login -u $username -p $password'
+                    sh "docker build -t ${NAME}:latest ."
+                    sh "docker tag ${NAME}:latest ${IMAGE_REPO}/${NAME}:${VERSION}"
+                }
             }
           }
     
