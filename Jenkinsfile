@@ -124,38 +124,7 @@ pipeline {
           }
         }
     } 
-    
-    
-    /*post {
-            success {
-                script {
-                    slackSend(
-                        color: 'good',
-                        message: "Job '${env.JOB_NAME}' (Build# ${env.BUILD_NUMBER}) succeeded!",
-                        channel: '#jenkins-pipelines',
-                        teamDomain: 'beitcloud',
-                        tokenCredentialId: 'slack'
-                    )
-                }
-            }
-    
-            failure {
-                script {
-                    slackSend(
-                        color: 'danger',
-                        message: "Job '${env.JOB_NAME}' (Build# ${env.BUILD_NUMBER}) failed!",
-                        channel: '#jenkins-pipelines',
-                        teamDomain: 'beitcloud',
-                        tokenCredentialId: 'slack'
-                    )
-                }
-            }
-    
-            always {
-                cleanWs()
-            }
-    }*/
-    
+  
 }
 
     
