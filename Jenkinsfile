@@ -23,23 +23,17 @@ pipeline {
     
         stage('Build Image') {
           steps {
-                withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: 'http://vault.beitcloud.com:8200'], vaultSecrets: [[path: 'dockerhub/creds', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]])  {
-                    sh 'docker login -u $username -p $password'
                     sh "docker build -t ${NAME}:latest ."
                     sh "docker tag ${NAME}:latest ${IMAGE_REPO}/${NAME}:${VERSION}"
-                }
             }
           }
     
-        // stage('Docker Login') {
+        // stage('Login and Push Image') {
         //   steps {
-        //         sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
-        //     }
-        //   }
-    
-        // stage('Push Image') {
-        //   steps {
-        //       sh 'docker push ${IMAGE_REPO}/${NAME}:${VERSION}'
+        //        withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: 'http://vault.beitcloud.com:8200'], vaultSecrets: [[path: 'dockerhub/creds', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]])  {
+        //            sh 'docker login -u $username -p $password'
+        //            sh 'docker push ${IMAGE_REPO}/${NAME}:${VERSION}'
+        //        }
         //   }
         // }
     
