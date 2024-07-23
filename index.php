@@ -1,42 +1,39 @@
-<?php 
+<?php
 echo '<!DOCTYPE html>
 <html>
    <head>
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <style>
-		#solar-system {
-		   background: url("https://github.com/vidalgithub/solar-system-9/blob/feature/images/solar-system-3.png")   center center;
-           background-repeat: no-repeat;			  
-		   background-size: cover;
-		   content: "";
-		   position: static;
-		   animation: spin 25s linear infinite;
-		   width: 50vw;
-		   height: 50vw;
-		}
+         #solar-system {
+            background: url("https://raw.githubusercontent.com/vidalgithub/solar-system-9/feature/images/animated-solar-system.png") center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            content: "";
+            position: static;
+            animation: spin 25s linear infinite;
+            width: 50vw;
+            height: 50vw;
+         }
 
-		@keyframes spin {
-		  100% { transform: rotate(360deg); }
-		}
-		
-		body {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			background: url("https://github.com/vidalgithub/solar-system-9/blob/feature/images/background.png");
-		}
-		
-/* 		.shadow {
-			  animation: rainbow 2s linear infinite;
-			} */
+         @keyframes spin {
+            100% {
+               transform: rotate(360deg);
+            }
+         }
 
-
+         body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url("https://raw.githubusercontent.com/vidalgithub/solar-system-9/feature/images/background.gif");
+            background-size: cover;
+            height: 100vh;
+            margin: 0;
+         }
       </style>
    </head>
    <body>
-	   
-				 <div id="solar-system"> </div>
-
+      <div id="solar-system"> </div>
    </body>
-</html>
-';
+</html>';
+?>
