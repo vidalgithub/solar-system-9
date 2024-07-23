@@ -5,7 +5,7 @@ echo '<!DOCTYPE html>
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <style>
          #solar-system {
-            background: url("https://github.com/vidalgithub/solar-system-9/blob/feature/images/animated-solar-system.png") center center;
+            background: url("https://raw.githubusercontent.com/vidalgithub/solar-system-9/feature/images/animated-solar-system.png") center center;
             background-repeat: no-repeat;
             background-size: cover;
             content: "";
@@ -25,12 +25,15 @@ echo '<!DOCTYPE html>
             display: flex;
             align-items: center;
             justify-content: center;
-            background: url("https://github.com/vidalgithub/solar-system-9/blob/feature/images/background.gif");
+            background: url("https://raw.githubusercontent.com/vidalgithub/solar-system-9/feature/images/background.gif");
+            background-size: cover;
+            height: 100vh;
+            margin: 0;
          }
       </style>
    </head>
    <body>
       <div id="solar-system"> </div>
    </body>
-</html>
-';
+</html>';
+?>
