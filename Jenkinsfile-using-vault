@@ -120,6 +120,21 @@ pipeline {
                 }  
             }
         }
+
+        stage('Remove Docker Image') {
+            environment {
+                IMAGE_NAME_TO_REMOVE = "trussworks/gh-cli:dependabot-docker-cimg-python-3.10.6"
+            }
+            steps {
+                script {
+                    try {
+                        sh "docker rmi -f ${IMAGE_NAME_TO_REMOVE}"
+                    } catch (Exception e) {
+                        echo "Failed to remove Docker image: ${e}"
+                    }
+                }
+            }
+        }
     } 
   
 }
