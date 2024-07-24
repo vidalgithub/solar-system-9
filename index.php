@@ -11,8 +11,8 @@ echo '<!DOCTYPE html>
             content: "";
             position: static;
             animation: spin 5s linear infinite;
-            width: 50vw;
-            height: 50vw;
+            width: 500vw;
+            height: 500vw;
          }
 
          @keyframes spin {
