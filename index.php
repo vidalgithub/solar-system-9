@@ -10,9 +10,9 @@ echo '<!DOCTYPE html>
             background-size: cover;
             content: "";
             position: static;
-            animation: spin 5s linear infinite;
-            width: 500vw;
-            height: 500vw;
+            animation: spin 60s linear infinite;
+            width: 50vw;
+            height: 50vw;
          }
 
          @keyframes spin {
@@ -28,7 +28,7 @@ echo '<!DOCTYPE html>
             background: url("https://raw.githubusercontent.com/vidalgithub/solar-system-9/feature/images/background.gif");
             background-size: cover;
             height: 100vh;
-            margin: 0;
+            margin: 100;
          }
       </style>
    </head>
