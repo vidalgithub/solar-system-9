@@ -5,12 +5,12 @@ echo '<!DOCTYPE html>
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <style>
          #solar-system {
-            background: url("https://raw.githubusercontent.com/vidalgithub/solar-system-9/feature/images/solar-system-3.png") center center;
+            background: url("https://raw.githubusercontent.com/vidalgithub/solar-system-9/feature/images/solar-system-6.png") center center;
             background-repeat: no-repeat;
             background-size: cover;
             content: "";
             position: static;
-            animation: spin 25s linear infinite;
+            animation: spin 5s linear infinite;
             width: 50vw;
             height: 50vw;
          }
