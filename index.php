@@ -25,7 +25,7 @@ echo '<!DOCTYPE html>
             display: flex;
             align-items: center;
             justify-content: center;
-            background: url("https://raw.githubusercontent.com/vidalgithub/solar-system-9/feature/images/background.png");
+            background: url("https://raw.githubusercontent.com/vidalgithub/solar-system-9/feature/images/background.gif");
             background-size: cover;
             height: 100vh;
             margin: 0;
