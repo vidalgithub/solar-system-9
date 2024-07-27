@@ -2,7 +2,13 @@ pipeline {
     agent any
     
     environment {
-        vaultUrl = credentials('vaultUrl') // Fetching vaultUrl from Jenkins credentials
+        NAME = "solar-system"
+        VERSION = "${env.BUILD_ID}-${env.GIT_COMMIT}"
+        IMAGE_REPO = "vidaldocker"
+        vaultUrl   = credentials('vaultUrl')
+        // ARGOCD_TOKEN = credentials('argocd-token')
+        //GITHUB_TOKEN=credentials('github-token')
+        //DOCKERHUB_CREDENTIALS=credentials('dockerhub')
     }
       
     stages {
