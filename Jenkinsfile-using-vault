@@ -75,10 +75,6 @@ pipeline {
                 }
             }
         }
-    }
-}
-
-
     
         stage('Clone/Pull Repo') {
           steps {
@@ -143,7 +139,6 @@ pipeline {
                 docker { image 'trussworks/gh-cli:dependabot-docker-cimg-python-3.10.6' }
             }
             steps {
-                //withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: "${env.vaultUrl}"], vaultSecrets: [[path: 'mycreds/github-creds', secretValues: [[envVar: 'GITHUB_TOKEN', vaultKey: 'github-token']]]]) {
                     sh '''
                     pwd
                     ls -la $PWD
@@ -153,11 +148,10 @@ pipeline {
                     mv a.tmp pr.sh
                     bash pr.sh
                     '''
-                //}  
             }
         }
-
-        /*stage('Remove Docker Image') {
+        /*
+        stage('Remove Docker Image') {
             environment {
                 IMAGE_NAME_TO_REMOVE = "trussworks/gh-cli:dependabot-docker-cimg-python-3.10.6"
             }
@@ -171,8 +165,8 @@ pipeline {
                 }
             }
         }*/
+
     } 
   
 }
-
-    
+  
