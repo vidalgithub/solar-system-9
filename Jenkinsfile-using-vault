@@ -112,7 +112,7 @@ pipeline {
                     mv a.tmp pr.sh
                     bash pr.sh
                     '''
-                }  
+                //}  
             }
         }
 
