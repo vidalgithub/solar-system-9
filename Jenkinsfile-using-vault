@@ -12,34 +12,6 @@ pipeline {
     }
 
     stages {
-        stage('Fetch Secrets from Vault') {
-            steps {
-                script {
-                    withVault(
-                        configuration: [
-                            disableChildPoliciesOverride: false,
-                            timeout: 60,
-                            vaultCredentialId: 'vaultCred',
-                            vaultUrl: "${env.VAULT_URL}"
-                        ],
-                        vaultSecrets: [
-                            [
-                                path: 'mycreds/dockerhub-creds/vidaldocker',
-                                secretValues: [
-                                    [envVar: 'DOCKERHUB_USERNAME', vaultKey: 'username'],
-                                    [envVar: 'DOCKERHUB_PASSWORD', vaultKey: 'password']
-                                ]
-                            ]
-                        ]
-                    ) {
-                        // Optional: Print to verify, remove in production
-                        echo "Username: ${DOCKERHUB_USERNAME}"
-                        // echo "Password: ${DOCKERHUB_PASSWORD}" // Do not print passwords in production
-                    }
-                }
-            }
-        }
-
         stage('Unit Tests') {
             steps {
                 echo 'Implement unit tests if applicable.'
