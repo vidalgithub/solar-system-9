@@ -44,7 +44,7 @@ pipeline {
     
         stage('Login and Push Image') {
           steps {
-               //withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: "${env.vaultUrl}"], vaultSecrets: [[path: 'mycreds/dockerhub-creds/vidaldocker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]])  {
+               withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: "${env.vaultUrl}"], vaultSecrets: [[path: 'mycreds/dockerhub-creds/vidaldocker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]])  {
                    sh 'echo \$password | docker login -u \$username --password-stdin'  //'docker login -u $username -p $password'
                    sh 'docker push ${IMAGE_REPO}/${NAME}:${VERSION}'
                }
