@@ -1,55 +1,86 @@
 pipeline {
-    //  agent {
-    //        label 'gce'
-    //    }
-        agent any
+    agent any
     
-      environment {
+    environment {
         NAME = "solar-system"
         VERSION = "${env.BUILD_ID}-${env.GIT_COMMIT}"
         IMAGE_REPO = "vidaldocker"
         vaultUrl   = credentials('vaultUrl')
-        // ARGOCD_TOKEN = credentials('argocd-token')
-        //GITHUB_TOKEN=credentials('github-token')
-        //DOCKERHUB_CREDENTIALS=credentials('dockerhub')
-      }
+    }
       
     stages {
         stage('Fetch Secrets from Vault') {
             steps {
                 script {
                     // Fetch secrets from Vault
-                    withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: "${env.vaultUrl}"], vaultSecrets: [[path: 'mycreds/dockerhub-creds/vidaldocker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]])  {
+                    withVault(
+                        configuration: [
+                            disableChildPoliciesOverride: false,
+                            timeout: 60,
+                            vaultCredentialId: 'vaultCred',
+                            vaultUrl: "${env.vaultUrl}"
+                        ], 
+                        vaultSecrets: [
+                            [
+                                path: 'mycreds/dockerhub-creds/vidaldocker', 
+                                secretValues: [
+                                    [envVar: 'DOCKERHUB_USERNAME', vaultKey: 'username'],
+                                    [envVar: 'DOCKERHUB_PASSWORD', vaultKey: 'password']
+                                ]
+                            ]
+                        ]
+                    ) {
                         // Print to verify (optional, remove in production)
-                        echo "Username: ${env.username}"
-                        echo "Password: ${env.password}" // Don't print the password in production
+                        echo "Username: ${DOCKERHUB_USERNAME}"
+                        echo "Password: ${DOCKERHUB_PASSWORD}" // Don't print the password in production
                     }
                 }
             }
         }
 
         stage('Unit Tests') {
-          steps {
-            echo 'Implement unit tests if applicable.'
-            echo 'This stage is a sample placeholder'
-          }
+            steps {
+                echo 'Implement unit tests if applicable.'
+                echo 'This stage is a sample placeholder'
+            }
         }
     
         stage('Build Image') {
-          steps {
-                    sh "docker build -t ${NAME}:latest ."
-                    sh "docker tag ${NAME}:latest ${IMAGE_REPO}/${NAME}:${VERSION}"
+            steps {
+                sh "docker build -t ${NAME}:latest ."
+                sh "docker tag ${NAME}:latest ${IMAGE_REPO}/${NAME}:${VERSION}"
             }
-          }
+        }
     
         stage('Login and Push Image') {
-          steps {
-               withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: "${env.vaultUrl}"], vaultSecrets: [[path: 'mycreds/dockerhub-creds/vidaldocker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]])  {
-                   sh 'echo $password | docker login -u $username --password-stdin'  //'docker login -u $username -p $password'
-                   sh 'docker push ${IMAGE_REPO}/${NAME}:${VERSION}'
-               }
-          }
+            steps {
+                script {
+                    withVault(
+                        configuration: [
+                            disableChildPoliciesOverride: false,
+                            timeout: 60,
+                            vaultCredentialId: 'vaultCred',
+                            vaultUrl: "${env.vaultUrl}"
+                        ], 
+                        vaultSecrets: [
+                            [
+                                path: 'mycreds/dockerhub-creds/vidaldocker', 
+                                secretValues: [
+                                    [envVar: 'DOCKERHUB_USERNAME', vaultKey: 'username'],
+                                    [envVar: 'DOCKERHUB_PASSWORD', vaultKey: 'password']
+                                ]
+                            ]
+                        ]
+                    ) {
+                        sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+                        sh "docker push ${IMAGE_REPO}/${NAME}:${VERSION}"
+                    }
+                }
+            }
         }
+    }
+}
+
     
         stage('Clone/Pull Repo') {
           steps {
