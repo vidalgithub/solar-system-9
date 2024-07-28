@@ -104,20 +104,19 @@ pipeline {
             //git clone -b feature https://github.com/vidalgithub/solar-system-9.git
         stage('Raise PR') {
             agent {
-            docker { image 'trussworks/gh-cli:dependabot-docker-cimg-python-3.10.6' }
+                docker { image 'trussworks/gh-cli:dependabot-docker-cimg-python-3.10.6' }
             }
             steps {
-                    // Must have gh-cli installon the Jenkins node.
-                    sh '''
-                    pwd
-                    ls -la $PWD
-                    echo "xcvbna" | sudo -S chown jenkins:jenkins pr.sh
-                    echo "xcvbna" | sudo -S chmod +x pr.sh
-                    tr -d "\r" <pr.sh >a.tmp
-                    mv a.tmp pr.sh
-                    bash pr.sh
-                    '''
-          }
+                sh '''
+                pwd
+                ls -la $PWD
+                chown jenkins:jenkins pr.sh || true
+                chmod +x pr.sh || true
+                tr -d "\\r" <pr.sh >a.tmp
+                mv a.tmp pr.sh
+                bash pr.sh
+                '''
+            }
         }
     } 
   
