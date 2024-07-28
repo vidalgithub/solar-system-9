@@ -1,99 +1,174 @@
 pipeline {
-    //  agent {
-    //        label 'gce'
-    //    }
-        agent any
-    
-      environment {
-        NAME = "solar-system"
-        VERSION = "${env.BUILD_ID}-${env.GIT_COMMIT}"
-        IMAGE_REPO = "vidaldocker"
-        vaultUrl   = credentials('vaultUrl')
+    agent any
+
+    environment {
+        NAME        = "solar-system"
+        VERSION     = "${env.BUILD_ID}-${env.GIT_COMMIT}"
+        IMAGE_REPO  = "vidaldocker"
+        VAULT_URL   = credentials('vaultUrl')
         // ARGOCD_TOKEN = credentials('argocd-token')
-        //GITHUB_TOKEN=credentials('github-token')
-        //DOCKERHUB_CREDENTIALS=credentials('dockerhub')
-      }
-      
+        // GITHUB_TOKEN = credentials('github-token')
+        // DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+    }
+     
     stages {
-        stage('Unit Tests') {
-          steps {
-            echo 'Implement unit tests if applicable.'
-            echo 'This stage is a sample placeholder'
-          }
-        }
-    
-        stage('Build Image') {
-          steps {
-                    sh "docker build -t ${NAME}:latest ."
-                    sh "docker tag ${NAME}:latest ${IMAGE_REPO}/${NAME}:${VERSION}"
-            }
-          }
-    
-        stage('Login and Push Image') {
-          steps {
-               withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: "${env.vaultUrl}"], vaultSecrets: [[path: 'mycreds/dockerhub-creds/vidaldocker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]])  {
-                   sh 'docker login -u $username -p $password'
-                   sh 'docker push ${IMAGE_REPO}/${NAME}:${VERSION}'
-               }
-          }
-        }
-    
-        stage('Clone/Pull Repo') {
-          steps {
-            script {
-              if (fileExists('gitops-argocd')) {
-    
-                echo 'Cloned repo already exists - Pulling latest changes'
-    
-                dir("gitops-argocd") {
-                  sh 'git pull'
+        stage('Initialize Pass Store if Needed') {
+            steps {
+                script {
+                    // Initialize the pass store if not already initialized
+                    sh '''
+                        if ! pass show docker-credential-helpers/docker-pass-initialized > /dev/null 2>&1; then
+                            echo "initialized" | pass insert -f docker-credential-helpers/docker-pass-initialized
+                        fi
+                        pass show docker-credential-helpers/docker-pass-initialized
+                    '''
                 }
-    
-              } else {
-                echo 'Repo does not exists - Cloning the repo'
-                sh 'git clone -b main https://github.com/vidalgithub/gitops-argocd.git'  
-              }
             }
-          }
         }
         
-        stage('Update Manifest') {
-          steps {
-            dir("gitops-argocd/jenkins-demo") {
-              sh '''
-              sed -i "s#${IMAGE_REPO}.*#${IMAGE_REPO}/${NAME}:${VERSION}#g" deployment.yaml
-              cat deployment.yaml
-              '''
-            }
-          }
-        }
-    
-        stage('Commit & Push') {
-          steps {
-            dir("gitops-argocd/jenkins-demo") {
-              withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: "${env.vaultUrl}"], vaultSecrets: [[path: 'mycreds/github-creds', secretValues: [[envVar: 'GITHUB_TOKEN', vaultKey: 'github-token']]]]) {
-                  sh '''
-                  git config --global user.email 'vidalngka@gmail.com'
-                  git config --global user.name 'vidalgithub'
-                  git remote set-url origin https://$GITHUB_TOKEN@github.com/vidalgithub/gitops-argocd.git
-                  git checkout feature
-                  git add -A
-                  git commit -am "Updated image version for Build - $VERSION"
-                  git rev-parse --short=10 HEAD 
-                  git push origin feature
-                  '''
-              }
-              
-            }
-          }
-        }
-    
-        stage('Print Environment') {
-                steps {
-                    script {
-                        sh 'env'
+        stage('Fetch Docker Credentials from Vault and Update pass store') {
+            steps {
+                script {
+                    withVault(
+                        configuration: [
+                            disableChildPoliciesOverride: false,
+                            timeout: 60,
+                            vaultCredentialId: 'vaultCred',
+                            vaultUrl: "${env.VAULT_URL}"
+                        ],
+                        vaultSecrets: [
+                            [
+                                path: 'mycreds/dockerhub-creds/vidaldocker',
+                                secretValues: [
+                                    [envVar: 'DOCKERHUB_USERNAME', vaultKey: 'username'],
+                                    [envVar: 'DOCKERHUB_PASSWORD', vaultKey: 'password']
+                                ]
+                            ]
+                        ]
+                    ) {
+                        // Fetch Docker credentials from Vault
+                        def dockerUsername = sh(script: "echo ${DOCKERHUB_USERNAME}", returnStdout: true).trim()
+                        def dockerPassword = sh(script: "echo ${DOCKERHUB_PASSWORD}", returnStdout: true).trim()
+        
+                        // Update pass store with new credentials
+                        sh """
+                            cd /var/lib/jenkins
+                            echo ${dockerPassword} | docker login -u ${dockerUsername} --password-stdin
+                            cd -
+                        """
                     }
                 }
+            }
+        }
+        
+        stage('Unit Tests') {
+            steps {
+                echo 'Implement unit tests if applicable.'
+                echo 'This stage is a sample placeholder.'
+            }
+        }
+
+        stage('Build Image') {
+            steps {
+                sh "docker build -t ${NAME}:latest ."
+                sh "docker tag ${NAME}:latest ${IMAGE_REPO}/${NAME}:${VERSION}"
+            }
+        }
+
+        stage('Login and Push Image') {
+            steps {
+                script {
+                    withVault(
+                        configuration: [
+                            disableChildPoliciesOverride: false,
+                            timeout: 60,
+                            vaultCredentialId: 'vaultCred',
+                            vaultUrl: "${env.VAULT_URL}"
+                        ],
+                        vaultSecrets: [
+                            [
+                                path: 'mycreds/dockerhub-creds/vidaldocker',
+                                secretValues: [
+                                    [envVar: 'DOCKERHUB_USERNAME', vaultKey: 'username'],
+                                    [envVar: 'DOCKERHUB_PASSWORD', vaultKey: 'password']
+                                ]
+                            ]
+                        ]
+                    ) {
+                        sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+                        sh "docker push ${IMAGE_REPO}/${NAME}:${VERSION}"
+                    }
+                }
+            }
+        }
+
+        stage('Clone/Pull Repo') {
+            steps {
+                script {
+                    if (fileExists('gitops-argocd')) {
+                        echo 'Cloned repo already exists - Pulling latest changes'
+                        dir("gitops-argocd") {
+                            sh 'git pull'
+                        }
+                    } else {
+                        echo 'Repo does not exist - Cloning the repo'
+                        sh 'git clone -b feature https://github.com/vidalgithub/gitops-argocd.git'
+                    }
+                }
+            }
+        }
+
+        stage('Update Manifest') {
+            steps {
+                dir("gitops-argocd/jenkins-demo") {
+                    sh '''
+                    sed -i "s#${IMAGE_REPO}.*#${IMAGE_REPO}/${NAME}:${VERSION}#g" deployment.yaml
+                    cat deployment.yaml
+                    '''
+                }
+            }
+        }
+
+        stage('Commit & Push') {
+            steps {
+                dir("gitops-argocd/jenkins-demo") {
+                    withVault(
+                        configuration: [
+                            disableChildPoliciesOverride: false,
+                            timeout: 60,
+                            vaultCredentialId: 'vaultCred',
+                            vaultUrl: "${env.VAULT_URL}"
+                        ],
+                        vaultSecrets: [
+                            [
+                                path: 'mycreds/github-creds',
+                                secretValues: [
+                                    [envVar: 'GITHUB_TOKEN', vaultKey: 'github-token']
+                                ]
+                            ]
+                        ]
+                    ) {
+                        sh '''
+                        git config --global user.email 'vidalngka@gmail.com'
+                        git config --global user.name 'vidalgithub'
+                        git remote set-url origin https://$GITHUB_TOKEN@github.com/vidalgithub/gitops-argocd.git
+                        git checkout feature
+                        git add -A
+                        git commit -am "Updated image version for Build - $VERSION"
+                        git rev-parse --short=10 HEAD
+                        git push origin feature
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Print Environment') {
+            steps {
+                script {
+                    sh 'env'
+                }
+            }
         }
 
         stage('Raise PR') {
@@ -101,21 +176,20 @@ pipeline {
                 docker { image 'trussworks/gh-cli:dependabot-docker-cimg-python-3.10.6' }
             }
             steps {
-                withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: "${env.vaultUrl}"], vaultSecrets: [[path: 'mycreds/github-creds', secretValues: [[envVar: 'GITHUB_TOKEN', vaultKey: 'github-token']]]]) {
-                    sh '''
-                    pwd
-                    ls -la $PWD
-                    chown jenkins:jenkins pr.sh || true
-                    chmod +x pr.sh || true
-                    tr -d "\\r" <pr.sh >a.tmp
-                    mv a.tmp pr.sh
-                    bash pr.sh
-                    '''
-                }  
+                sh '''
+                pwd
+                ls -la $PWD
+                chown jenkins:jenkins pr.sh || true
+                chmod +x pr.sh || true
+                tr -d "\\r" <pr.sh >a.tmp
+                mv a.tmp pr.sh
+                bash pr.sh
+                '''
             }
         }
 
-        /*stage('Remove Docker Image') {
+        /*
+        stage('Remove Docker Image') {
             environment {
                 IMAGE_NAME_TO_REMOVE = "trussworks/gh-cli:dependabot-docker-cimg-python-3.10.6"
             }
@@ -128,9 +202,7 @@ pipeline {
                     }
                 }
             }
-        }*/
-    } 
-  
+        }
+        */
+    }
 }
-
-    
