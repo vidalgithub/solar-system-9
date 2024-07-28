@@ -39,7 +39,7 @@ pipeline {
                         // Update pass store with new credentials
                         sh """
                             echo ${dockerPassword} | pass insert -f docker-credential-helpers/dockerhub-password
-                            pass show docker-credential-helpers/docker-pass-initialized
+                            pass show docker-credential-helpers/dockerhub-password
                             echo ${dockerPassword} | docker login -u ${dockerUsername} --password-stdin
                         """
                     }
@@ -55,6 +55,7 @@ pipeline {
                         if ! pass show docker-credential-helpers/docker-pass-initialized > /dev/null 2>&1; then
                             echo "initialized" | pass insert -f docker-credential-helpers/docker-pass-initialized
                         fi
+                        pass show docker-credential-helpers/docker-pass-initialized
                     '''
                 }
             }
