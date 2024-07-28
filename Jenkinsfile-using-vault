@@ -12,6 +12,40 @@ pipeline {
     }
 
     stages {
+        stage('Fetch Docker Credentials from Vault and Update pass store') {
+            steps {
+                script {
+                    withVault(
+                        configuration: [
+                            disableChildPoliciesOverride: false,
+                            timeout: 60,
+                            vaultCredentialId: 'vaultCred',
+                            vaultUrl: "${env.VAULT_URL}"
+                        ],
+                        vaultSecrets: [
+                            [
+                                path: 'mycreds/dockerhub-creds/vidaldocker',
+                                secretValues: [
+                                    [envVar: 'DOCKERHUB_USERNAME', vaultKey: 'username'],
+                                    [envVar: 'DOCKERHUB_PASSWORD', vaultKey: 'password']
+                                ]
+                            ]
+                        ]
+                    ) {
+                        // Fetch Docker credentials from Vault
+                        def dockerUsername = sh(script: "echo ${DOCKERHUB_USERNAME}", returnStdout: true).trim()
+                        def dockerPassword = sh(script: "echo ${DOCKERHUB_PASSWORD}", returnStdout: true).trim()
+        
+                        // Update pass store with new credentials
+                        sh """
+                            echo ${dockerPassword} | pass insert -m docker-credential-helpers/docker-pass-initialized
+                            echo ${dockerPassword} | docker login -u ${dockerUsername} --password-stdin
+                        """
+                    }
+                }
+            }
+        }
+
         stage('Initialize Pass Store if Needed') {
             steps {
                 script {
