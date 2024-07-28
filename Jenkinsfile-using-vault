@@ -25,7 +25,7 @@ pipeline {
                 }
             }
         }
-        /*
+        
         stage('Fetch Docker Credentials from Vault and Update pass store') {
             steps {
                 script {
@@ -52,15 +52,15 @@ pipeline {
         
                         // Update pass store with new credentials
                         sh """
-                            echo ${dockerPassword} | pass insert -f docker-credential-helpers/https://index.docker.io/v1/
-                            pass show docker-credential-helpers/https://index.docker.io/v1/
+                            cd /var/lib/jenkins
                             echo ${dockerPassword} | docker login -u ${dockerUsername} --password-stdin
+                            cd -
                         """
                     }
                 }
             }
         }
-        */
+        
         stage('Unit Tests') {
             steps {
                 echo 'Implement unit tests if applicable.'
