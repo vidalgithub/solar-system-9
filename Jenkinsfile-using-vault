@@ -51,8 +51,8 @@ pipeline {
         
                         // Update pass store with new credentials
                         sh """
-                            echo ${dockerPassword} | pass insert -f docker-credential-helpers/dockerhub-password
-                            pass show docker-credential-helpers/dockerhub-password
+                            echo ${dockerPassword} | pass insert -f docker-credential-helpers/https://index.docker.io/v1/
+                            pass show docker-credential-helpers/https://index.docker.io/v1/
                             echo ${dockerPassword} | docker login -u ${dockerUsername} --password-stdin
                         """
                     }
