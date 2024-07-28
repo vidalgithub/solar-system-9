@@ -12,7 +12,7 @@ pipeline {
     }
      
     stages {
-                stage('Initialize Pass Store if Needed') {
+        stage('Initialize Pass Store if Needed') {
             steps {
                 script {
                     // Initialize the pass store if not already initialized
