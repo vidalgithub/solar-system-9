@@ -175,17 +175,32 @@ pipeline {
                 docker { image 'trussworks/gh-cli:dependabot-docker-cimg-python-3.10.6' }
             }
             steps {
-                withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vaultCred', vaultUrl: "${env.vaultUrl}"], vaultSecrets: [[path: 'mycreds/github-creds', secretValues: [[envVar: 'GITHUB_TOKEN', vaultKey: 'github-token']]]]) { 
-                  sh '''
-                  pwd
-                  ls -la $PWD
-                  chown jenkins:jenkins pr.sh || true
-                  chmod +x pr.sh || true
-                  tr -d "\\r" <pr.sh >a.tmp
-                  mv a.tmp pr.sh
-                  bash pr.sh
-                  '''
-                }
+                    withVault(
+                        configuration: [
+                            disableChildPoliciesOverride: false,
+                            timeout: 60,
+                            vaultCredentialId: 'vaultCred',
+                            vaultUrl: "${env.VAULT_URL}"
+                        ],
+                        vaultSecrets: [
+                            [
+                                path: 'mycreds/github-creds',
+                                secretValues: [
+                                    [envVar: 'GITHUB_TOKEN', vaultKey: 'github-token']
+                                ]
+                            ]
+                        ]
+                    ) {
+                         sh '''
+                         pwd
+                         ls -la $PWD
+                         chown jenkins:jenkins pr.sh || true
+                         chmod +x pr.sh || true
+                         tr -d "\\r" <pr.sh >a.tmp
+                         mv a.tmp pr.sh
+                         bash pr.sh
+                         '''
+                      }
             }
         }
         /*
