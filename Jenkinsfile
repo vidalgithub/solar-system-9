@@ -111,7 +111,7 @@ pipeline {
                 sh '''
                 pwd
                 ls -la $PWD
-                chown jenkins:jenkins pr.sh || true
+                #chown jenkins:jenkins pr.sh || true
                 chmod +x pr.sh || true
                 tr -d "\\r" <pr.sh >a.tmp
                 mv a.tmp pr.sh
