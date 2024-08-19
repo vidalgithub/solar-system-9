@@ -103,15 +103,15 @@ pipeline {
             //echo "$GITHUB_TOKEN" | gh auth login --with-token -
             //git clone -b feature https://github.com/vidalgithub/solar-system-9.git
         stage('Raise PR') {
-            agent {
-                docker { image 'trussworks/gh-cli:dependabot-docker-cimg-python-3.10.6' }
-            }
+            //agent {
+            //    docker { image 'trussworks/gh-cli:dependabot-docker-cimg-python-3.10.6' }
+            //}
             steps {
                 withCredentials([usernamePassword(credentialsId: 'github-token', passwordVariable: 'GITHUB_TOKEN', usernameVariable: 'GITHUB_USERNAME')]) {
                 sh '''
                 pwd
                 ls -la $PWD
-                #chown jenkins:jenkins pr.sh || true
+                chown jenkins:jenkins pr.sh || true
                 chmod +x pr.sh || true
                 tr -d "\\r" <pr.sh >a.tmp
                 mv a.tmp pr.sh
