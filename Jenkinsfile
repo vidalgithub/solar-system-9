@@ -107,7 +107,7 @@ pipeline {
             //    docker { image 'trussworks/gh-cli:dependabot-docker-cimg-python-3.10.6' }
             //}
             steps {
-                withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+                withCredentials([usernamePassword(credentialsId: 'github-token', passwordVariable: 'GITHUB_TOKEN', usernameVariable: 'GITHUB_USERNAME')]) {
                 sh '''
                 pwd
                 ls -la $PWD
